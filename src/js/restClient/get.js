@@ -1,7 +1,7 @@
 "use strict";
 const request = require('request');
 const url = require('url');
-const baseUrl = 'http://localhost:3000/';
+const baseUrl = process.env.BASE_URI || 'http://localhost:3000/';
 
 module.exports = function(urlString) {
     if (urlString && urlString.length < 4 || (urlString.length >= 4 && urlString.substring(0, 3).toLowerCase() !== 'http')) {
