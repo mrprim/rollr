@@ -1,11 +1,8 @@
 "use strict";
-const express = require('express');
-const router = express.Router({
-     mergeParams: true
-});
+const auth = require('./auth/');
+const session = require('./session/');
 
-router.get('/', function (req, res) {
-	res.json({'message': 'Test'});
-});
-
-module.exports = router;
+module.exports = {
+    auth,
+    session
+};
