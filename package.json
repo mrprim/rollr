@@ -4,6 +4,7 @@
     "description": "A Web App for PbP Dice Rolling",
     "main": "server.js",
     "scripts": {
+        "start": "webpack -p && node ./server.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
