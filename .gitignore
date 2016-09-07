@@ -1,6 +1,7 @@
 startup
 
 # Webpack Bundles
+*bundle.js
 *bundle.*.js
 # Logs
 logs
