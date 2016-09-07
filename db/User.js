@@ -7,7 +7,12 @@ const userSchema = new Schema({
     password: String,
     email: String,
     admin: Boolean,
-    googleId: String,
+    googleId: {
+        type: String,
+        index: true,
+        unique: true,
+        sparse: true
+    },
     created_at: Date,
     updated_at: Date
 });
