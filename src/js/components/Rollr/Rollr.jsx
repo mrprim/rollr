@@ -34,7 +34,7 @@ module.exports = React.createClass({
         if(user) {
             return <div>Welcome, {user._id}</div>
         } else {
-            return <a href="/auth/google">Sign In with Google</a>
+            return <a href="/api/auth/google">Sign In with Google</a>
         }
     },
 

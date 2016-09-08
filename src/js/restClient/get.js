@@ -1,13 +1,13 @@
 "use strict";
 const request = require('request');
 const url = require('url');
-const baseUrl = process.env.BASE_URI;
+const baseUrl = process.env.BASE_URI + 'api/';
 
 module.exports = function(urlString) {
     if (urlString && urlString.length < 4 || (urlString.length >= 4 && urlString.substring(0, 3).toLowerCase() !== 'http')) {
         urlString = url.resolve(baseUrl, urlString);
     }
-
+    console.log(baseUrl, urlString);
     return new Promise((resolve, reject) => {
 
         request(urlString, (error, response, body) => {

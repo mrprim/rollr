@@ -5,7 +5,7 @@ const router = express.Router({
     mergeParams: true
 });
 
-router.get('/', function(req, res) {
+router.get('/session', function(req, res) {
     if (!req.user) {
         res.json({});
     } else {

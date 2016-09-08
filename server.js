@@ -23,8 +23,8 @@ function routes() {
     }));
     app.use(passport.initialize());
     app.use(passport.session());
-    app.use('/auth/', api.auth.google);
-    app.use('/session/', api.session);
+    app.use('/api/', api.auth.google);
+    app.use('/api/', api.session);
     app.use(basicErrorHandling);
 }
 
