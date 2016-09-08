@@ -1,8 +1,8 @@
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
 
-var BUILD_DIR = path.resolve(__dirname, 'static');
-var APP_DIR = path.resolve(__dirname, 'src');
+const BUILD_DIR = path.resolve(__dirname, 'static');
+const APP_DIR = path.resolve(__dirname, 'src');
 
 module.exports = {
     resolve: {
