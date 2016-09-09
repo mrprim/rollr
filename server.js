@@ -25,6 +25,7 @@ function routes() {
     app.use(passport.session());
     app.use('/api/', api.auth.google);
     app.use('/api/', api.session);
+    app.use('/api/', api.roll);
     app.use(basicErrorHandling);
 }
 

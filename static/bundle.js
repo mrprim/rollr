@@ -22315,7 +22315,7 @@
 	
 	var request = __webpack_require__(/*! request */ 179);
 	var url = __webpack_require__(/*! url */ 184);
-	var baseUrl = ("http://localhost:3000/") + 'api/';
+	var baseUrl = ("http://localhost:3000/");
 	
 	module.exports = function (urlString) {
 	    if (urlString && urlString.length < 4 || urlString.length >= 4 && urlString.substring(0, 3).toLowerCase() !== 'http') {

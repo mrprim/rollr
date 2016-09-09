@@ -1,7 +1,7 @@
 "use strict";
 const request = require('request');
 const url = require('url');
-const baseUrl = process.env.BASE_URI + 'api/';
+const baseUrl = process.env.BASE_URI;
 
 module.exports = function(urlString) {
     if (urlString && urlString.length < 4 || (urlString.length >= 4 && urlString.substring(0, 3).toLowerCase() !== 'http')) {
