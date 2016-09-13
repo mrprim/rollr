@@ -8,6 +8,7 @@ const server = require('http').Server(app);
 const db = require('./db');
 const listenPort = process.env.PORT || 3000;
 const io = require('socket.io').listen(server);
+const bodyParser = require('body-parser');
 
 routes();
 connectToDb()
@@ -16,7 +17,7 @@ connectToDb()
 
 function routes() {
     const api = require('./api/index');
-
+    app.use(bodyParser.json());
     app.use(express.static('static'));
     app.use(expressSession({
         secret: 'my secret key',

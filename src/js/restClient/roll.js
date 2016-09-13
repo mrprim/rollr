@@ -1,5 +1,5 @@
-const get = require('./get');
+const post = require('./post');
 
-module.exports = function(diceString) {
-    return get('/api/roll/' + diceString);
+module.exports = function(req) {
+    return post('/api/roll/',req);
 };

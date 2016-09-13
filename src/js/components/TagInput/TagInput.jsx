@@ -11,29 +11,25 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return {value: '', tags: []};
+        return {value: ''};
     },
 
     handleChange: function(event) {
-        let tags = this.state.tags;
         let val = event.target.value;
         let list = val.split(',');
 
-        console.log(list);
-
         if (list.length >= 2) {
             val = list.pop();
-            tags = tags.concat(list);
+            this.props.addTags(list);
         }
-        console.log(tags);
-        this.setState({value: val, tags: tags});
 
+        this.setState({value: val});
     },
 
     render: function() {
         return (
             <div className={this.getClass()}>
-                <input value={this.state.value} onChange={this.handleChange}/> {this.state.tags}
+                <input value={this.state.value} onChange={this.handleChange}/> {this.props.tags}
             </div>
         )
     }

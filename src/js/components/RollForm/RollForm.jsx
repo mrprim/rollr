@@ -12,21 +12,35 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return {rollString: ''};
+        return {rollString: '', tags: []};
     },
+
     handleRollStringChange: function(event) {
         this.setState({rollString: event.target.value});
     },
 
     roll: function() {
-        restClient.roll(this.state.rollString);
+        console.log(this.state.tags);
+        restClient.roll({
+            diceString:this.state.rollString,
+            tags: this.state.tags
+        }).then((roll)=> {
+            console.log(roll);
+            this.props.addRoll(roll);
+        });
+    },
+
+    addTags: function(nTags) {
+        let tags = this.state.tags;
+        tags = tags.concat(nTags);
+        this.setState({tags});
     },
 
     render: function() {
         return (
             <div className={this.getClass()}>
                 <input value={this.state.rollString} onChange={this.handleRollStringChange}/>
-                <TagInput/>
+                <TagInput addTags={this.addTags} tags={this.state.tags}/>
                 <button onClick={this.roll}>Roll</button>
             </div>
         )

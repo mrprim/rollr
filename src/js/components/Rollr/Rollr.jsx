@@ -1,31 +1,36 @@
 const componentName = 'Rollr';
-require('./'+ componentName + '.less');
+require('./' + componentName + '.less');
 
 const React = require('react');
 const restClient = require('../../restClient/');
+const socket = require('socket.io-client')();
 
 const RollForm = require('../RollForm/RollForm');
 const RollListItem = require('../RollListItem/RollListItem');
-const socket = require('socket.io-client')();
+
 module.exports = React.createClass({
 
     getInitialState: function() {
-        return {
-            user: undefined,
-            rolls: []
-        }
+        return {rolls: []}
     },
 
     componentDidMount: function() {
-        socket.on('roll', (x)=> {
-            console.log(x);
-        });
-		this.initialize();
-	},
+//        socket.on('roll', (x) => {
+//            console.log(x);
+//        });
+        this.initialize();
+    },
 
     initialize: function() {
         this.loadUser();
         this.loadRolls();
+    },
+
+    addRoll: function(roll) {
+        let rolls = this.state.rolls;
+
+        rolls.push(roll);
+        this.setState({rolls});
     },
 
     loadUser: function() {
@@ -48,7 +53,7 @@ module.exports = React.createClass({
         const state = this.state;
         const user = state.user;
 
-        if(user) {
+        if (user) {
             return <div>Welcome, {user._id}</div>
         } else {
             return <a href="/api/auth/google">Sign In with Google</a>
@@ -58,7 +63,7 @@ module.exports = React.createClass({
     render: function() {
         let state = this.state || {};
         let rolls = state.rolls || [];
-        let renderRolls = rolls.map((roll, i)=> {
+        let renderRolls = rolls.map((roll, i) => {
             return <RollListItem roll={roll} key={i}/>;
         });
 
@@ -66,8 +71,7 @@ module.exports = React.createClass({
             <div className={this.getClass()}>
                 <h1>Rollr</h1>
                 {this.handleLoginState()}
-                <RollForm/>
-                {renderRolls}
+                <RollForm addRoll={this.addRoll}/> {renderRolls}
             </div>
         )
     }
