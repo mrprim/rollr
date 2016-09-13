@@ -6,6 +6,8 @@ const router = express.Router({
     mergeParams: true
 });
 
+
+
 router.get('/roll/:diceString', function(req, res) {
     const roll = new Roll();
     let diceString = req.params.diceString;
@@ -18,6 +20,7 @@ router.get('/roll/:diceString', function(req, res) {
             date: Date.now()
         });
         db.save();
+
         res.json(result);
     } else {
         res.json({error:'error'});

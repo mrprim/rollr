@@ -5,7 +5,7 @@ const restClient = require('../../restClient/');
 
 const RollForm = require('../RollForm/RollForm');
 const RollListItem = require('../RollListItem/RollListItem');
-
+const socket = require('socket.io-client')();
 module.exports = React.createClass({
 
     getInitialState: function() {
@@ -16,6 +16,9 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
+        socket.on('roll', (x)=> {
+            console.log(x);
+        });
 		this.initialize();
 	},
 
