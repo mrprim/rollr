@@ -6,6 +6,8 @@ const router = express.Router();
 const app = express();
 const db = require('./db');
 const listenPort = process.env.PORT || 3000;
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 routes();
 connectToDb()

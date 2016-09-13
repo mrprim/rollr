@@ -21865,12 +21865,18 @@
 	var React = __webpack_require__(/*! react */ 1);
 	var restClient = __webpack_require__(/*! ../../restClient/ */ 177);
 	
+	var RollForm = __webpack_require__(/*! ../RollForm/RollForm */ 349);
+	var RollListItem = __webpack_require__(/*! ../RollListItem/RollListItem */ 345);
+	
 	module.exports = React.createClass({
 	    displayName: 'exports',
 	
 	
 	    getInitialState: function getInitialState() {
-	        return { user: undefined };
+	        return {
+	            user: undefined,
+	            rolls: []
+	        };
 	    },
 	
 	    componentDidMount: function componentDidMount() {
@@ -21879,6 +21885,7 @@
 	
 	    initialize: function initialize() {
 	        this.loadUser();
+	        this.loadRolls();
 	    },
 	
 	    loadUser: function loadUser() {
@@ -21886,6 +21893,14 @@
 	
 	        return restClient.getSession().then(function (resp) {
 	            _this.setState({ user: resp.user });
+	        });
+	    },
+	
+	    loadRolls: function loadRolls() {
+	        var _this2 = this;
+	
+	        return restClient.getRolls().then(function (resp) {
+	            _this2.setState({ rolls: resp });
 	        });
 	    },
 	
@@ -21914,6 +21929,12 @@
 	    },
 	
 	    render: function render() {
+	        var state = this.state || {};
+	        var rolls = state.rolls || [];
+	        var renderRolls = rolls.map(function (roll, i) {
+	            return React.createElement(RollListItem, { roll: roll, key: i });
+	        });
+	
 	        return React.createElement(
 	            'div',
 	            { className: this.getClass() },
@@ -21922,7 +21943,9 @@
 	                null,
 	                'Rollr'
 	            ),
-	            this.handleLoginState()
+	            this.handleLoginState(),
+	            React.createElement(RollForm, null),
+	            renderRolls
 	        );
 	    }
 	});
@@ -22298,10 +22321,14 @@
 	
 	var get = __webpack_require__(/*! ./get */ 178);
 	var getSession = __webpack_require__(/*! ./getSession */ 344);
+	var getRolls = __webpack_require__(/*! ./getRolls */ 348);
+	var roll = __webpack_require__(/*! ./roll */ 352);
 	
 	module.exports = {
 	    get: get,
-	    getSession: getSession
+	    getSession: getSession,
+	    getRolls: getRolls,
+	    roll: roll
 	};
 
 /***/ },
@@ -65766,6 +65793,214 @@
 	
 	module.exports = function () {
 	    return get('/api/session');
+	};
+
+/***/ },
+/* 345 */
+/*!*********************************************************!*\
+  !*** ./src/js/components/RollListItem/RollListItem.jsx ***!
+  \*********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	__webpack_require__(/*! ./RollListItem.less */ 346);
+	
+	var React = __webpack_require__(/*! react */ 1);
+	var restClient = __webpack_require__(/*! ../../restClient/ */ 177);
+	
+	module.exports = React.createClass({
+	    displayName: 'exports',
+	
+	
+	    getClass: function getClass() {
+	        return 'RollListItem';
+	    },
+	
+	    render: function render() {
+	        var props = this.props || {};
+	        var roll = props.roll;
+	        var rollResult = roll && roll.result && JSON.parse(roll.result);
+	        return React.createElement(
+	            'div',
+	            { className: this.getClass() },
+	            roll.diceString,
+	            ' = ',
+	            rollResult.result
+	        );
+	    }
+	});
+
+/***/ },
+/* 346 */
+/*!**********************************************************!*\
+  !*** ./src/js/components/RollListItem/RollListItem.less ***!
+  \**********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/less-loader!./RollListItem.less */ 347);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../../../../~/style-loader/addStyles.js */ 176)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./RollListItem.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./RollListItem.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 347 */
+/*!*****************************************************************************************!*\
+  !*** ./~/css-loader!./~/less-loader!./src/js/components/RollListItem/RollListItem.less ***!
+  \*****************************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../../../../~/css-loader/lib/css-base.js */ 175)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 348 */
+/*!***************************************!*\
+  !*** ./src/js/restClient/getRolls.js ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var get = __webpack_require__(/*! ./get */ 178);
+	
+	module.exports = function () {
+	    return get('/api/roll');
+	};
+
+/***/ },
+/* 349 */
+/*!*************************************************!*\
+  !*** ./src/js/components/RollForm/RollForm.jsx ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	__webpack_require__(/*! ./RollForm.less */ 350);
+	
+	var React = __webpack_require__(/*! react */ 1);
+	var restClient = __webpack_require__(/*! ../../restClient/ */ 177);
+	
+	module.exports = React.createClass({
+	    displayName: 'exports',
+	
+	
+	    getClass: function getClass() {
+	        return 'RollForm';
+	    },
+	
+	    getInitialState: function getInitialState() {
+	        return { rollString: '' };
+	    },
+	    handleRollStringChange: function handleRollStringChange(event) {
+	        this.setState({ rollString: event.target.value });
+	    },
+	
+	    roll: function roll() {
+	        restClient.roll(this.state.rollString);
+	    },
+	
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            { className: this.getClass() },
+	            React.createElement('input', {
+	                value: this.state.rollString,
+	                onChange: this.handleRollStringChange
+	            }),
+	            React.createElement(
+	                'button',
+	                { onClick: this.roll },
+	                'Roll'
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+/* 350 */
+/*!**************************************************!*\
+  !*** ./src/js/components/RollForm/RollForm.less ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/less-loader!./RollForm.less */ 351);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../../../../~/style-loader/addStyles.js */ 176)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./RollForm.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./RollForm.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 351 */
+/*!*********************************************************************************!*\
+  !*** ./~/css-loader!./~/less-loader!./src/js/components/RollForm/RollForm.less ***!
+  \*********************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../../../../~/css-loader/lib/css-base.js */ 175)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 352 */
+/*!***********************************!*\
+  !*** ./src/js/restClient/roll.js ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var get = __webpack_require__(/*! ./get */ 178);
+	
+	module.exports = function (diceString) {
+	    return get('/api/roll/' + diceString);
 	};
 
 /***/ }
