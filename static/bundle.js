@@ -21861,7 +21861,8 @@
 
 	'use strict';
 	
-	__webpack_require__(/*! ./Rollr.less */ 173);
+	var componentName = 'Rollr';
+	__webpack_require__(/*! . */ 401)("./" + componentName + '.less');
 	
 	var React = __webpack_require__(/*! react */ 1);
 	var restClient = __webpack_require__(/*! ../../restClient/ */ 177);
@@ -21909,7 +21910,7 @@
 	    },
 	
 	    getClass: function getClass() {
-	        return 'Rollr';
+	        return componentName;
 	    },
 	
 	    handleLoginState: function handleLoginState() {
@@ -65838,17 +65839,19 @@
 
 	'use strict';
 	
-	__webpack_require__(/*! ./RollForm.less */ 348);
+	var componentName = 'RollForm';
+	__webpack_require__(/*! . */ 403)("./" + componentName + '.less');
 	
 	var React = __webpack_require__(/*! react */ 1);
 	var restClient = __webpack_require__(/*! ../../restClient/ */ 177);
+	var TagInput = __webpack_require__(/*! ../TagInput/TagInput */ 404);
 	
 	module.exports = React.createClass({
 	    displayName: 'exports',
 	
 	
 	    getClass: function getClass() {
-	        return 'RollForm';
+	        return componentName;
 	    },
 	
 	    getInitialState: function getInitialState() {
@@ -65866,10 +65869,8 @@
 	        return React.createElement(
 	            'div',
 	            { className: this.getClass() },
-	            React.createElement('input', {
-	                value: this.state.rollString,
-	                onChange: this.handleRollStringChange
-	            }),
+	            React.createElement('input', { value: this.state.rollString, onChange: this.handleRollStringChange }),
+	            React.createElement(TagInput, null),
 	            React.createElement(
 	                'button',
 	                { onClick: this.roll },
@@ -65934,7 +65935,8 @@
 
 	'use strict';
 	
-	__webpack_require__(/*! ./RollListItem.less */ 351);
+	var componentName = 'RollListItem';
+	__webpack_require__(/*! . */ 402)("./" + componentName + '.less');
 	
 	var React = __webpack_require__(/*! react */ 1);
 	var restClient = __webpack_require__(/*! ../../restClient/ */ 177);
@@ -65944,7 +65946,7 @@
 	
 	
 	    getClass: function getClass() {
-	        return 'RollListItem';
+	        return componentName;
 	    },
 	
 	    render: function render() {
@@ -73563,6 +73565,202 @@
 
 	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["io"] = __webpack_require__(/*! -!/home/mrprim/~/socket.io-client/lib/index.js */ 353);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 400 */,
+/* 401 */
+/*!************************************************!*\
+  !*** ./src/js/components/Rollr ^\.\/.*\.less$ ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./Rollr.less": 173
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 401;
+
+
+/***/ },
+/* 402 */
+/*!*******************************************************!*\
+  !*** ./src/js/components/RollListItem ^\.\/.*\.less$ ***!
+  \*******************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./RollListItem.less": 351
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 402;
+
+
+/***/ },
+/* 403 */
+/*!***************************************************!*\
+  !*** ./src/js/components/RollForm ^\.\/.*\.less$ ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./RollForm.less": 348
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 403;
+
+
+/***/ },
+/* 404 */
+/*!*************************************************!*\
+  !*** ./src/js/components/TagInput/TagInput.jsx ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var componentName = 'TagInput';
+	var React = __webpack_require__(/*! react */ 1);
+	var restClient = __webpack_require__(/*! ../../restClient/ */ 177);
+	
+	__webpack_require__(/*! . */ 405)("./" + componentName + '.less');
+	
+	module.exports = React.createClass({
+	    displayName: 'exports',
+	
+	
+	    getClass: function getClass() {
+	        return componentName;
+	    },
+	
+	    getInitialState: function getInitialState() {
+	        return { value: '', tags: [] };
+	    },
+	
+	    handleChange: function handleChange(event) {
+	        var tags = this.state.tags;
+	        var val = event.target.value;
+	        var list = val.split(',');
+	
+	        console.log(list);
+	
+	        if (list.length >= 2) {
+	            val = list.pop();
+	            tags = tags.concat(list);
+	        }
+	        console.log(tags);
+	        this.setState({ value: val, tags: tags });
+	    },
+	
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            { className: this.getClass() },
+	            React.createElement('input', { value: this.state.value, onChange: this.handleChange }),
+	            ' ',
+	            this.state.tags
+	        );
+	    }
+	});
+
+/***/ },
+/* 405 */
+/*!***************************************************!*\
+  !*** ./src/js/components/TagInput ^\.\/.*\.less$ ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./TagInput.less": 406
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 405;
+
+
+/***/ },
+/* 406 */
+/*!**************************************************!*\
+  !*** ./src/js/components/TagInput/TagInput.less ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/less-loader!./TagInput.less */ 407);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../../../../~/style-loader/addStyles.js */ 176)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./TagInput.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./TagInput.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 407 */
+/*!*********************************************************************************!*\
+  !*** ./~/css-loader!./~/less-loader!./src/js/components/TagInput/TagInput.less ***!
+  \*********************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../../../../~/css-loader/lib/css-base.js */ 175)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "", ""]);
+	
+	// exports
+
 
 /***/ }
 /******/ ]);

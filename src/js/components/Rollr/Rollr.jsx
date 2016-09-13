@@ -1,4 +1,5 @@
-require('./Rollr.less');
+const componentName = 'Rollr';
+require('./'+ componentName + '.less');
 
 const React = require('react');
 const restClient = require('../../restClient/');
@@ -40,7 +41,7 @@ module.exports = React.createClass({
     },
 
     getClass: function() {
-        return 'Rollr';
+        return componentName;
     },
 
     handleLoginState: function() {

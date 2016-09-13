@@ -1,19 +1,21 @@
-require('./RollForm.less');
+const componentName = 'RollForm';
+require('./' + componentName + '.less');
 
 const React = require('react');
 const restClient = require('../../restClient/');
+const TagInput = require('../TagInput/TagInput');
 
 module.exports = React.createClass({
 
     getClass: function() {
-        return 'RollForm';
+        return componentName;
     },
 
     getInitialState: function() {
-      return {rollString: ''};
+        return {rollString: ''};
     },
     handleRollStringChange: function(event) {
-      this.setState({rollString: event.target.value});
+        this.setState({rollString: event.target.value});
     },
 
     roll: function() {
@@ -23,11 +25,9 @@ module.exports = React.createClass({
     render: function() {
         return (
             <div className={this.getClass()}>
-                <input
-                    value={this.state.rollString}
-                    onChange={this.handleRollStringChange}
-                />
-            <button onClick={this.roll}>Roll</button>
+                <input value={this.state.rollString} onChange={this.handleRollStringChange}/>
+                <TagInput/>
+                <button onClick={this.roll}>Roll</button>
             </div>
         )
     }

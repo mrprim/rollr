@@ -1,4 +1,5 @@
-require('./RollListItem.less');
+const componentName = 'RollListItem';
+require('./'+componentName+'.less');
 
 const React = require('react');
 const restClient = require('../../restClient/');
@@ -6,7 +7,7 @@ const restClient = require('../../restClient/');
 module.exports = React.createClass({
 
     getClass: function() {
-        return 'RollListItem';
+        return componentName;
     },
 
     render: function() {
