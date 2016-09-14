@@ -22,7 +22,10 @@ passport.use(new GoogleStrategy({
                 googleId: profile.id
             }, {
                 googleId: profile.id,
-                email: profile.emails[0].value
+                email: profile.emails[0].value,
+                firstName: profile.name && profile.name.givenName,
+                lastName:  profile.name && profile.name.familyName,
+                created_at: Date.now()
             },
             (err, user) => {
                 return done(err, user);

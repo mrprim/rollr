@@ -7,17 +7,19 @@ const socket = require('socket.io-client')();
 
 const RollForm = require('../RollForm/RollForm');
 const RollListItem = require('../RollListItem/RollListItem');
+const HeaderBar = require('../HeaderBar/HeaderBar');
+
 
 module.exports = React.createClass({
 
     getInitialState: function() {
-        return {rolls: []}
+        return {mode: 'roller', rolls: []}
     },
 
     componentDidMount: function() {
-//        socket.on('roll', (x) => {
-//            console.log(x);
-//        });
+        //        socket.on('roll', (x) => {
+        //            console.log(x);
+        //        });
         this.initialize();
     },
 
@@ -49,18 +51,11 @@ module.exports = React.createClass({
         return componentName;
     },
 
-    handleLoginState: function() {
-        const state = this.state;
-        const user = state.user;
-
-        if (user) {
-            return <div>Welcome, {user._id}</div>
-        } else {
-            return <a href="/api/auth/google">Sign In with Google</a>
-        }
+    handleRenderMode: function() {
+        return this.renderModeRoller();
     },
 
-    render: function() {
+    renderModeRoller: function() {
         let state = this.state || {};
         let rolls = state.rolls || [];
         let renderRolls = rolls.map((roll, i) => {
@@ -68,11 +63,17 @@ module.exports = React.createClass({
         });
 
         return (
-            <div className={this.getClass()}>
-                <h1>Rollr</h1>
-                {this.handleLoginState()}
+            <div>
                 <RollForm addRoll={this.addRoll}/> {renderRolls}
             </div>
         )
+    },
+
+    render: function() {
+        return <div className={this.getClass()}>
+            <HeaderBar user={this.state.user} />
+            {this.handleRenderMode()}
+        </div>
+
     }
 });

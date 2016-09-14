@@ -28,7 +28,12 @@ router.get('/roll/:diceString', function(req, res) {
             error: 'error'
         });
     }
-    //    req.user._id
+});
+
+router.get('/roll/validate/:diceString', function(req, res) {
+    const roll = new Roll();
+    let diceString = req.params.diceString
+    res.json({valid: roll.validate(diceString)});
 });
 
 router.post('/roll/', function(req, res) {
