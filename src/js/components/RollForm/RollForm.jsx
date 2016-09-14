@@ -15,12 +15,17 @@ module.exports = React.createClass({
     },
 
     getInitialState: function() {
-        return {rollString: '', rollStringValidation: 'error', tags: []};
+        return {rollString: '', tags: []};
     },
 
     handleRollStringChange: function(event) {
         let value = event.target.value;
         let msg;
+
+        if(value.length === 0) {
+            return this.setState({rollString: value, rollStringValidation: null});
+        }
+
         restClient.validateRoll(value).then((resp) => {
             if (resp.valid) {
                 msg = 'success';
@@ -66,7 +71,7 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <form className={this.getClass()}>
+            <div className={this.getClass()}>
                 <FormGroup controlId="diceString" validationState={this.state.rollStringValidation}>
                     <FormControl type="text" value={this.state.rollString} placeholder="Enter Dice String" onChange={this.handleRollStringChange}/>
                     <FormControl.Feedback/>
@@ -74,7 +79,7 @@ module.exports = React.createClass({
 
                 <TagInput addTags={this.addTags} tags={this.state.tags}/>
                 <button onClick={this.roll}>Roll</button>
-            </form>
+            </div>
         )
     }
 });

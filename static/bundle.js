@@ -73498,7 +73498,7 @@
 	    },
 	
 	    getInitialState: function getInitialState() {
-	        return { rollString: '', rollStringValidation: 'error', tags: [] };
+	        return { rollString: '', tags: [] };
 	    },
 	
 	    handleRollStringChange: function handleRollStringChange(event) {
@@ -73506,6 +73506,11 @@
 	
 	        var value = event.target.value;
 	        var msg = void 0;
+	
+	        if (value.length === 0) {
+	            return this.setState({ rollString: value, rollStringValidation: null });
+	        }
+	
 	        restClient.validateRoll(value).then(function (resp) {
 	            if (resp.valid) {
 	                msg = 'success';
@@ -73548,7 +73553,7 @@
 	
 	    render: function render() {
 	        return React.createElement(
-	            'form',
+	            'div',
 	            { className: this.getClass() },
 	            React.createElement(
 	                FormGroup,
