@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const rollSchema = new Schema({
-    userId: Schema.ObjectId,
+    userId: { type: Schema.Types.ObjectId, ref: 'User' },
     diceString: String,
     result: String,
     tags: Array,

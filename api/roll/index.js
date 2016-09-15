@@ -61,7 +61,7 @@ router.post('/roll/', function(req, res) {
 });
 
 router.get('/roll', function(req, res) {
-    DbRoll.find({}, (err, rolls) => {
+    DbRoll.find({}).populate('userId').exec((err, rolls) => {
         if (err) {
             res.json(err);
         } else {

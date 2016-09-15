@@ -20,7 +20,6 @@ module.exports = React.createClass({
 
     handleRollStringChange: function(event) {
         const value = event.target.value;
-        console.log(value);
         let msg;
 
         this.setState({rollString: value});

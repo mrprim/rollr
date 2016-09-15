@@ -29527,7 +29527,7 @@
 	        var state = this.state || {};
 	        var rolls = state.rolls || [];
 	        var renderRolls = rolls.map(function (roll, i) {
-	            return React.createElement(RollListItem, { roll: roll, key: i });
+	            return React.createElement(RollListItem, { roll: roll, key: roll._id });
 	        });
 	
 	        return React.createElement(
@@ -73505,7 +73505,6 @@
 	        var _this = this;
 	
 	        var value = event.target.value;
-	        console.log(value);
 	        var msg = void 0;
 	
 	        this.setState({ rollString: value });
@@ -73640,7 +73639,7 @@
 	
 	
 	// module
-	exports.push([module.id, "", ""]);
+	exports.push([module.id, ".RollForm .form-group {\n  max-width: 400px;\n}\n", ""]);
 	
 	// exports
 
@@ -73657,6 +73656,11 @@
 	var componentName = 'TagInput';
 	var React = __webpack_require__(/*! react */ 51);
 	var restClient = __webpack_require__(/*! ../../restClient/ */ 228);
+	
+	var FormGroup = __webpack_require__(/*! react-bootstrap */ 412).FormGroup;
+	var FormControl = __webpack_require__(/*! react-bootstrap */ 412).FormControl;
+	var ControlLabel = __webpack_require__(/*! react-bootstrap */ 412).ControlLabel;
+	var Tag = __webpack_require__(/*! ../Tag/Tag */ 670);
 	
 	__webpack_require__(/*! . */ 403)("./" + componentName + '.less');
 	
@@ -73684,13 +73688,24 @@
 	        this.setState({ value: val });
 	    },
 	
+	    renderTags: function renderTags() {
+	        var tags = this.props.tags;
+	        return tags.map(function (tag, i) {
+	            return React.createElement(Tag, { tag: tag, key: i });
+	        });
+	    },
+	
 	    render: function render() {
 	        return React.createElement(
 	            'div',
 	            { className: this.getClass() },
-	            React.createElement('input', { value: this.state.value, onChange: this.handleChange }),
-	            ' ',
-	            this.props.tags
+	            React.createElement(
+	                FormGroup,
+	                { controlId: 'tags' },
+	                React.createElement(FormControl, { type: 'text', value: this.state.value, placeholder: 'Tags...', onChange: this.handleChange }),
+	                React.createElement(FormControl.Feedback, null)
+	            ),
+	            this.renderTags()
 	        );
 	    }
 	});
@@ -93469,12 +93484,6 @@
 	var componentName = 'HeaderBar';
 	var React = __webpack_require__(/*! react */ 51);
 	
-	var Navbar = __webpack_require__(/*! react-bootstrap */ 412).Navbar;
-	var Nav = __webpack_require__(/*! react-bootstrap */ 412).Nav;
-	var NavItem = __webpack_require__(/*! react-bootstrap */ 412).NavItem;
-	var NavDropdown = __webpack_require__(/*! react-bootstrap */ 412).NavDropdown;
-	var MenuItem = __webpack_require__(/*! react-bootstrap */ 412).MenuItem;
-	
 	__webpack_require__(/*! . */ 666)("./" + componentName + '.less');
 	
 	module.exports = React.createClass({
@@ -93517,23 +93526,14 @@
 	
 	    render: function render() {
 	        return React.createElement(
-	            Navbar,
-	            { className: this.getClass(), inverse: true },
+	            'div',
+	            { className: this.getClass() },
+	            'Rollr',
 	            React.createElement(
-	                Navbar.Header,
-	                null,
-	                React.createElement(
-	                    Navbar.Brand,
-	                    null,
-	                    React.createElement(
-	                        'a',
-	                        { href: '#' },
-	                        'Rollr'
-	                    )
-	                ),
-	                React.createElement(Navbar.Toggle, null)
-	            ),
-	            React.createElement(Navbar.Collapse, null)
+	                'div',
+	                { className: 'pull-right' },
+	                this.handleUserStatus()
+	            )
 	        );
 	    }
 	});
@@ -93622,6 +93622,108 @@
 	module.exports = function (diceString) {
 	    return get('/api/roll/validate/' + diceString);
 	};
+
+/***/ },
+/* 670 */
+/*!***************************************!*\
+  !*** ./src/js/components/Tag/Tag.jsx ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var componentName = 'Tag';
+	var React = __webpack_require__(/*! react */ 51);
+	var restClient = __webpack_require__(/*! ../../restClient/ */ 228);
+	
+	__webpack_require__(/*! . */ 671)("./" + componentName + '.less');
+	
+	module.exports = React.createClass({
+	    displayName: 'exports',
+	
+	
+	    getClass: function getClass() {
+	        return componentName;
+	    },
+	
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            { className: this.getClass() },
+	            this.props.tag
+	        );
+	    }
+	});
+
+/***/ },
+/* 671 */
+/*!**********************************************!*\
+  !*** ./src/js/components/Tag ^\.\/.*\.less$ ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./Tag.less": 672
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 671;
+
+
+/***/ },
+/* 672 */
+/*!****************************************!*\
+  !*** ./src/js/components/Tag/Tag.less ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/less-loader!./Tag.less */ 673);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../../../../~/style-loader/addStyles.js */ 227)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./Tag.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./Tag.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 673 */
+/*!***********************************************************************!*\
+  !*** ./~/css-loader!./~/less-loader!./src/js/components/Tag/Tag.less ***!
+  \***********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../../../../~/css-loader/lib/css-base.js */ 226)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".Tag {\n  background-color: blue;\n  border-radius: 5px;\n  color: white;\n  width: 50px;\n}\n", ""]);
+	
+	// exports
+
 
 /***/ }
 /******/ ]);

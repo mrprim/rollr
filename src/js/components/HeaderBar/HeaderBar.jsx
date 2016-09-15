@@ -1,12 +1,6 @@
 const componentName = 'HeaderBar';
 const React = require('react');
 
-const Navbar = require('react-bootstrap').Navbar;
-const Nav = require('react-bootstrap').Nav;
-const NavItem = require('react-bootstrap').NavItem;
-const NavDropdown = require('react-bootstrap').NavDropdown;
-const MenuItem = require('react-bootstrap').MenuItem;
-
 require('./' + componentName + '.less');
 
 module.exports = React.createClass({
@@ -40,16 +34,10 @@ module.exports = React.createClass({
 
     render: function() {
         return (
-            <Navbar className={this.getClass()} inverse>
-                <Navbar.Header>
-                    <Navbar.Brand>
-                        <a href="#">Rollr</a>
-                    </Navbar.Brand>
-                    <Navbar.Toggle/>
-                </Navbar.Header>
-                <Navbar.Collapse>
-                </Navbar.Collapse>
-            </Navbar>
+            <div className={this.getClass()}>
+                Rollr
+                <div className="pull-right">{this.handleUserStatus()}</div>
+            </div>
         )
     }
 });

@@ -59,7 +59,7 @@ module.exports = React.createClass({
         let state = this.state || {};
         let rolls = state.rolls || [];
         let renderRolls = rolls.map((roll, i) => {
-            return <RollListItem roll={roll} key={i}/>;
+            return <RollListItem roll={roll} key={roll._id}/>;
         });
 
         return (
