@@ -73505,10 +73505,13 @@
 	        var _this = this;
 	
 	        var value = event.target.value;
+	        console.log(value);
 	        var msg = void 0;
 	
+	        this.setState({ rollString: value });
+	
 	        if (value.length === 0) {
-	            return this.setState({ rollString: value, rollStringValidation: null });
+	            return this.setState({ rollStringValidation: null });
 	        }
 	
 	        restClient.validateRoll(value).then(function (resp) {
@@ -73517,20 +73520,21 @@
 	            } else {
 	                msg = 'error';
 	            }
-	            _this.setState({ rollString: value, rollStringValidation: msg });
+	            _this.setState({ rollStringValidation: msg });
 	        }).catch(function () {
-	            _this.setState({ rollString: value, rollStringValidation: 'error' });
+	            _this.setState({ rollStringValidation: 'error' });
 	        });
 	    },
 	
 	    roll: function roll() {
 	        var _this2 = this;
 	
-	        console.log(this.state.tags);
-	        restClient.roll({ diceString: this.state.rollString, tags: this.state.tags }).then(function (roll) {
-	            console.log(roll);
-	            _this2.props.addRoll(roll);
-	        });
+	        if (this.state.rollStringValidation === 'success') {
+	            restClient.roll({ diceString: this.state.rollString, tags: this.state.tags }).then(function (roll) {
+	                console.log(roll);
+	                _this2.props.addRoll(roll);
+	            });
+	        }
 	    },
 	
 	    addTags: function addTags(nTags) {

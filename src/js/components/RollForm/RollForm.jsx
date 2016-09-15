@@ -19,11 +19,14 @@ module.exports = React.createClass({
     },
 
     handleRollStringChange: function(event) {
-        let value = event.target.value;
+        const value = event.target.value;
+        console.log(value);
         let msg;
 
+        this.setState({rollString: value});
+
         if(value.length === 0) {
-            return this.setState({rollString: value, rollStringValidation: null});
+            return this.setState({rollStringValidation: null});
         }
 
         restClient.validateRoll(value).then((resp) => {
@@ -32,18 +35,21 @@ module.exports = React.createClass({
             } else {
                 msg = 'error';
             }
-            this.setState({rollString: value, rollStringValidation: msg});
+            this.setState({rollStringValidation: msg});
         }).catch(() => {
-            this.setState({rollString: value, rollStringValidation: 'error'});
+            this.setState({rollStringValidation: 'error'});
         });
     },
 
     roll: function() {
-        console.log(this.state.tags);
-        restClient.roll({diceString: this.state.rollString, tags: this.state.tags}).then((roll) => {
-            console.log(roll);
-            this.props.addRoll(roll);
-        });
+
+        if(this.state.rollStringValidation === 'success') {
+            restClient.roll({diceString: this.state.rollString, tags: this.state.tags}).then((roll) => {
+                console.log(roll);
+                this.props.addRoll(roll);
+            });
+        }
+
     },
 
     addTags: function(nTags) {
