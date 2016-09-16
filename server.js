@@ -7,7 +7,6 @@ const app = express();
 const server = require('http').Server(app);
 const db = require('./db');
 const listenPort = process.env.PORT || 3000;
-const io = require('socket.io').listen(server);
 const bodyParser = require('body-parser');
 
 routes();
@@ -21,9 +20,9 @@ function routes() {
     app.use(express.static('static'));
     app.use(expressSession({
         secret: 'my secret key',
-        resave: true,
         saveUninitialized: true
     }));
+    resave: true,
     app.use(passport.initialize());
     app.use(passport.session());
     app.use('/api/', api.auth.google);

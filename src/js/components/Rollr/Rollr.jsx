@@ -3,7 +3,6 @@ require('./' + componentName + '.less');
 
 const React = require('react');
 const restClient = require('../../restClient/');
-const socket = require('socket.io-client')();
 
 const RollForm = require('../RollForm/RollForm');
 const RollListItem = require('../RollListItem/RollListItem');
@@ -31,7 +30,7 @@ module.exports = React.createClass({
     addRoll: function(roll) {
         let rolls = this.state.rolls;
 
-        rolls.push(roll);
+        rolls.unshift(roll);
         this.setState({rolls});
     },
 
@@ -59,7 +58,9 @@ module.exports = React.createClass({
         let state = this.state || {};
         let rolls = state.rolls || [];
         let renderRolls = rolls.map((roll, i) => {
-            return <RollListItem roll={roll} key={roll._id}/>;
+            if(i<= 20) {
+                return <RollListItem data={roll} key={roll._id}/>;
+            }
         });
 
         return (

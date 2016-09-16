@@ -1,16 +1,13 @@
 const webpack = require('webpack');
-const path = require('path');
-
-const BUILD_DIR = path.resolve(__dirname, 'static');
-const APP_DIR = path.resolve(__dirname, 'src');
+const vars = require('./variables.config')
 
 module.exports = {
     resolve: {
         extensions: ['', '.js', '.jsx']
     },
-    entry: APP_DIR + "/js/entry.js",
+    entry: vars.APP_DIR + "/js/entry.js",
     output: {
-        path: BUILD_DIR,
+        path: vars.BUILD_DIR,
         filename: "bundle.js"
     },
     module: {
@@ -29,7 +26,7 @@ module.exports = {
         }, {
             test: /\.jsx?$/,
             loaders: ['babel?cacheDirectory'],
-            include: APP_DIR
+            include: vars.APP_DIR
         }]
     },
     plugins: [

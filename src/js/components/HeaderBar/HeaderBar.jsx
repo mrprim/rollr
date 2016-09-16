@@ -1,5 +1,6 @@
 const componentName = 'HeaderBar';
 const React = require('react');
+const userUtils = require('../../util/userUtils');
 
 require('./' + componentName + '.less');
 
@@ -11,25 +12,13 @@ module.exports = React.createClass({
 
     handleUserStatus: function() {
         const user = this.props.user;
-        let name = this.getUserName(user);
+        let name = userUtils.getName(user);
 
         if (user) {
             return <div>Welcome, {name}</div>
         } else {
             return <a href="/api/auth/google">Sign In with Google</a>
         }
-    },
-
-    getUserName: function(user) {
-        if (!user) {
-            return '';
-        }
-
-        if (user.username)
-            return user.username;
-        if (user.email)
-            return user.email;
-        return user._id;
     },
 
     render: function() {
