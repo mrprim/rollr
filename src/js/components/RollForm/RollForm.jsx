@@ -46,8 +46,6 @@ module.exports = React.createClass({
             restClient.roll({diceString: this.state.rollString, tags: this.state.tags}).then((roll) => {
                 if(roll.error) {
                     this.setState({rollStringValidation: 'error'});
-                } else {
-                    this.props.addRoll(roll);
                 }
             });
         }

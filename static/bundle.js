@@ -29470,6 +29470,7 @@
 	var RollForm = __webpack_require__(/*! ../RollForm/RollForm */ 400);
 	var RollListItem = __webpack_require__(/*! ../RollListItem/RollListItem */ 665);
 	var HeaderBar = __webpack_require__(/*! ../HeaderBar/HeaderBar */ 670);
+	var socket = io();
 	
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -29480,9 +29481,11 @@
 	    },
 	
 	    componentDidMount: function componentDidMount() {
-	        //        socket.on('roll', (x) => {
-	        //            console.log(x);
-	        //        });
+	        var _this = this;
+	
+	        socket.on('roll', function (roll) {
+	            _this.addRoll(roll);
+	        });
 	        this.initialize();
 	    },
 	
@@ -29499,18 +29502,18 @@
 	    },
 	
 	    loadUser: function loadUser() {
-	        var _this = this;
+	        var _this2 = this;
 	
 	        return restClient.getSession().then(function (resp) {
-	            _this.setState({ user: resp.user });
+	            _this2.setState({ user: resp.user });
 	        });
 	    },
 	
 	    loadRolls: function loadRolls() {
-	        var _this2 = this;
+	        var _this3 = this;
 	
 	        return restClient.getRolls().then(function (resp) {
-	            _this2.setState({ rolls: resp });
+	            _this3.setState({ rolls: resp });
 	        });
 	    },
 	
@@ -73563,8 +73566,6 @@
 	            restClient.roll({ diceString: this.state.rollString, tags: this.state.tags }).then(function (roll) {
 	                if (roll.error) {
 	                    _this2.setState({ rollStringValidation: 'error' });
-	                } else {
-	                    _this2.props.addRoll(roll);
 	                }
 	            });
 	        }

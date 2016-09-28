@@ -5,7 +5,7 @@ const DbRoll = require('../../db/Roll');
 const router = express.Router({
     mergeParams: true
 });
-
+let io;
 
 
 router.get('/roll/:diceString', function(req, res) {
@@ -60,7 +60,8 @@ router.post('/roll/', function(req, res) {
                 });
             } else {
                 roll._user = req.user;
-                console.log(roll);
+
+                req.app.io.emit('roll', roll);
                 res.json(roll);
             }
         });

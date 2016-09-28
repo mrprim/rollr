@@ -5,16 +5,23 @@ const expressSession = require('express-session');
 const router = express.Router();
 const app = express();
 const server = require('http').Server(app);
+const io = require('socket.io')(server);
 const db = require('./db');
 const listenPort = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
 
-routes();
+setupIo();
+setupRoutes();
 connectToDb()
     .then(listen)
     .catch(logDbConnectionError);
 
-function routes() {
+
+function setupIo() {
+    app.io = io;
+}
+
+function setupRoutes() {
     const api = require('./api/index');
     app.use(bodyParser.json());
     app.use(express.static('static'));

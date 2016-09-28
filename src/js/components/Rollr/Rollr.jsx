@@ -7,7 +7,7 @@ const restClient = require('../../restClient/');
 const RollForm = require('../RollForm/RollForm');
 const RollListItem = require('../RollListItem/RollListItem');
 const HeaderBar = require('../HeaderBar/HeaderBar');
-
+const socket = io();
 
 module.exports = React.createClass({
 
@@ -16,9 +16,11 @@ module.exports = React.createClass({
     },
 
     componentDidMount: function() {
-        //        socket.on('roll', (x) => {
-        //            console.log(x);
-        //        });
+        let _this = this;
+
+        socket.on('roll', function (roll) {
+            _this.addRoll(roll);
+        });
         this.initialize();
     },
 
