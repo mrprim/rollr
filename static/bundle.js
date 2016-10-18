@@ -52,6 +52,7 @@
 	//require('expose?$!jquery');
 	//require('expose?jQuery!jquery');
 	__webpack_require__(/*! expose?io!socket.io-client */ 1);
+	__webpack_require__(/*! ../less/global.less */ 674);
 	
 	var React = __webpack_require__(/*! react */ 51);
 	var ReactDOM = __webpack_require__(/*! react-dom */ 84);
@@ -73568,13 +73569,16 @@
 	                    _this2.setState({ rollStringValidation: 'error' });
 	                }
 	            });
+	        } else {
+	            this.setState({ rollStringValidation: 'error' });
 	        }
 	    },
 	
 	    addTags: function addTags(nTags) {
 	        var tags = this.state.tags;
 	        tags = tags.concat(nTags);
-	        this.setState({ tags: tags });
+	
+	        this.setState({ tags: Array.from(new Set(tags)) });
 	    },
 	
 	    getDiceStringValidationState: function getDiceStringValidationState() {
@@ -73601,8 +73605,8 @@
 	            ),
 	            React.createElement(TagInput, { addTags: this.addTags, tags: this.state.tags }),
 	            React.createElement(
-	                'button',
-	                { onClick: this.roll },
+	                'div',
+	                { className: 'roll-button', onClick: this.roll },
 	                'Roll'
 	            )
 	        );
@@ -73674,7 +73678,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".RollForm .form-group {\n  max-width: 400px;\n}\n", ""]);
+	exports.push([module.id, ".RollForm {\n  background: white;\n  -webkit-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  -moz-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  margin-left: auto;\n  margin-right: auto;\n  border: solid 1px #ccc;\n  max-width: 400px;\n  padding: 20px;\n  border-radius: 10px;\n}\n.RollForm .form-group {\n  max-width: 400px;\n}\n.RollForm .roll-button {\n  background: #BE5869;\n  border-radius: 50px;\n  height: 100px;\n  width: 100px;\n  margin: 0 auto;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 100px;\n  cursor: pointer;\n}\n.RollForm .roll-button:hover {\n  box-shadow: blue 0px 0px 0px 3px;\n}\n", ""]);
 	
 	// exports
 
@@ -73723,6 +73727,14 @@
 	        this.setState({ value: val });
 	    },
 	
+	    handleBlur: function handleBlur(event) {
+	        var val = event.target.value;
+	
+	        this.props.addTags(val);
+	
+	        this.setState({ value: '' });
+	    },
+	
 	    renderTags: function renderTags() {
 	        var tags = this.props.tags;
 	        return tags.map(function (tag, i) {
@@ -73737,7 +73749,9 @@
 	            React.createElement(
 	                FormGroup,
 	                { controlId: 'tags' },
-	                React.createElement(FormControl, { type: 'text', value: this.state.value, placeholder: 'Tags...', onChange: this.handleChange }),
+	                React.createElement(FormControl, { type: 'text', value: this.state.value, placeholder: 'Tags...',
+	                    onBlur: this.handleBlur,
+	                    onChange: this.handleChange }),
 	                React.createElement(FormControl.Feedback, null)
 	            ),
 	            this.renderTags()
@@ -93411,7 +93425,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".Tag {\n  background-color: blue;\n  border-radius: 5px;\n  color: white;\n  width: 50px;\n}\n", ""]);
+	exports.push([module.id, ".Tag {\n  border-radius: 5px;\n  color: white;\n  min-width: 50px;\n  padding: 0 5px;\n  text-align: center;\n  display: inline-block;\n  -webkit-box-shadow: inset 0 0 29px -7px rgba(0, 0, 0, 0.75);\n  -moz-box-shadow: inset 0 0 29px -7px rgba(0, 0, 0, 0.75);\n  box-shadow: inset 0 0 29px -7px rgba(0, 0, 0, 0.75);\n  background: #16A085;\n  margin: 2px;\n}\n", ""]);
 	
 	// exports
 
@@ -93755,6 +93769,52 @@
 	
 	// module
 	exports.push([module.id, "", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 674 */
+/*!******************************!*\
+  !*** ./src/less/global.less ***!
+  \******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../../~/css-loader!./../../~/less-loader!./global.less */ 675);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../../~/style-loader/addStyles.js */ 227)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/less-loader/index.js!./global.less", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/less-loader/index.js!./global.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 675 */
+/*!*************************************************************!*\
+  !*** ./~/css-loader!./~/less-loader!./src/less/global.less ***!
+  \*************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../../~/css-loader/lib/css-base.js */ 226)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "body {\n  background: #4ECDC4;\n  /* fallback for old browsers */\n  background: -webkit-linear-gradient(to left, #4ECDC4, #556270);\n  /* Chrome 10-25, Safari 5.1-6 */\n  background: linear-gradient(to left, #4ECDC4, #556270);\n  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */\n}\n", ""]);
 	
 	// exports
 

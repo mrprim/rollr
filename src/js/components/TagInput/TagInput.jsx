@@ -31,6 +31,14 @@ module.exports = React.createClass({
         this.setState({value: val});
     },
 
+    handleBlur: function(event) {
+        let val = event.target.value;
+
+        this.props.addTags(val);
+
+        this.setState({value: ''});
+    },
+
     renderTags: function() {
         let tags = this.props.tags;
         return tags.map((tag, i) => {
@@ -42,7 +50,9 @@ module.exports = React.createClass({
         return (
             <div className={this.getClass()}>
                 <FormGroup controlId="tags">
-                    <FormControl type="text" value={this.state.value} placeholder="Tags..." onChange={this.handleChange}/>
+                    <FormControl type="text" value={this.state.value} placeholder="Tags..."
+                        onBlur={this.handleBlur}
+                        onChange={this.handleChange}/>
                     <FormControl.Feedback/>
                 </FormGroup>
 

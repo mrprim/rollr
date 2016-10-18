@@ -1,6 +1,7 @@
 //require('expose?$!jquery');
 //require('expose?jQuery!jquery');
 require('expose?io!socket.io-client');
+require('../less/global.less');
 
 const React = require('react');
 const ReactDOM = require('react-dom');

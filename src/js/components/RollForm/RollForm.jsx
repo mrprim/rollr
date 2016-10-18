@@ -48,6 +48,8 @@ module.exports = React.createClass({
                     this.setState({rollStringValidation: 'error'});
                 }
             });
+        } else {
+            this.setState({rollStringValidation: 'error'});            
         }
 
     },
@@ -55,7 +57,10 @@ module.exports = React.createClass({
     addTags: function(nTags) {
         let tags = this.state.tags;
         tags = tags.concat(nTags);
-        this.setState({tags});
+
+
+
+        this.setState({tags: Array.from(new Set(tags))});
     },
 
     getDiceStringValidationState() {
@@ -84,7 +89,7 @@ module.exports = React.createClass({
                 </FormGroup>
 
                 <TagInput addTags={this.addTags} tags={this.state.tags}/>
-                <button onClick={this.roll}>Roll</button>
+                <div className="roll-button" onClick={this.roll}>Roll</div>
             </div>
         )
     }
