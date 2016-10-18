@@ -5,8 +5,9 @@ const React = require('react');
 const restClient = require('../../restClient/');
 
 const RollForm = require('../RollForm/RollForm');
-const RollListItem = require('../RollListItem/RollListItem');
+const RollList = require('../RollList/RollList');
 const HeaderBar = require('../HeaderBar/HeaderBar');
+const Footer = require('../Footer/Footer');
 const socket = io();
 
 module.exports = React.createClass({
@@ -59,15 +60,11 @@ module.exports = React.createClass({
     renderModeRoller: function() {
         let state = this.state || {};
         let rolls = state.rolls || [];
-        let renderRolls = rolls.map((roll, i) => {
-            if(i<= 20) {
-                return <RollListItem data={roll} key={roll._id}/>;
-            }
-        });
 
         return (
             <div>
-                <RollForm addRoll={this.addRoll}/> {renderRolls}
+                <RollForm addRoll={this.addRoll}/>
+                <RollList rolls={rolls}/>
             </div>
         )
     },
@@ -76,6 +73,7 @@ module.exports = React.createClass({
         return <div className={this.getClass()}>
             <HeaderBar user={this.state.user} />
             {this.handleRenderMode()}
+            <Footer />
         </div>
 
     }

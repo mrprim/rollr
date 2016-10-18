@@ -1,5 +1,35 @@
 .RollListItem {
-  > div {
-    display: inline-block;
-  }
+    background: white;
+    -webkit-box-shadow: 0 0 10px -7px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0 0 10px -7px rgba(0,0,0,0.75);
+    box-shadow: 0 0 10px -7px rgba(0,0,0,0.75);
+    margin-left: auto;
+    margin-right: auto;
+    border: solid 1px #ccc;
+    max-width: 600px;
+    padding: 5px 20px;
+    border-radius: 2px;
+    margin-top: 4px;
+    > div {
+        display: inline-block;
+        text-align: center;
+        border-right: solid 1px #ccc;
+        &:last-child {
+            border-right: none;
+        }
+        &.user {
+            width: 200px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        &.dice-string {
+            width: 200px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding: 0 10px;
+        }
+        &.result {
+            float: right;
+        }
+    }
 }

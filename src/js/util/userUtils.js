@@ -1,5 +1,5 @@
 function getName(user) {
-    let name = 'Anonymous';
+    let name = '???';
     if (user) {
         name = user.username || user.email || name;
     }

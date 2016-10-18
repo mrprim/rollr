@@ -42,7 +42,7 @@ module.exports = React.createClass({
     renderTags: function() {
         let tags = this.props.tags;
         return tags.map((tag, i) => {
-            return <Tag tag={tag} key={i}/>;
+            return <Tag tag={tag} key={i} removeTag={this.props.removeTag}/>;
         });
     },
 

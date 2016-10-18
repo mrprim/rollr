@@ -22,9 +22,9 @@ module.exports = React.createClass({
         let rollResult = roll && roll.result && JSON.parse(roll.result);
         return (
             <div className={this.getClass()}>
-                <div>{this.getUsername()}</div>
-                <div>{roll.diceString}</div>
-                <div>{rollResult.result}</div>
+                <div className="user">{this.getUsername()}</div>
+                <div className="dice-string">{roll.diceString}</div>
+                <div className="result">{rollResult.result}</div>
             </div>
         )
     }
