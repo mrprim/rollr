@@ -17,7 +17,7 @@ module.exports = React.createClass({
         let rolls = this.props.rolls || [];
         let renderRolls = rolls.map((roll, i) => {
             if (i <= 20) {
-                return <RollListItem data={roll} key={roll._id}/>;
+                return <RollListItem data={roll} key={roll._id} showRoll={this.props.showRoll}/>;
             }
         });
         return (

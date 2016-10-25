@@ -15,10 +15,11 @@ module.exports = React.createClass({
     },
 
     render: function() {
+        let removeIcon = this.props.removeTag ? <span className="glyphicon glyphicon-remove-sign" onClick={this.handleRemoveClick}></span> : '';
         return (
             <div className={this.getClass()}>
                 {this.props.tag}
-                <span className="glyphicon glyphicon-remove-sign" onClick={this.handleRemoveClick}></span>
+                {removeIcon}
             </div>
         )
     }

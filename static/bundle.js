@@ -7740,7 +7740,7 @@
 	
 	
 	// module
-	exports.push([module.id, "body {\n  background: #4ECDC4;\n  /* fallback for old browsers */\n  background: -webkit-linear-gradient(to left, #4ECDC4, #556270);\n  /* Chrome 10-25, Safari 5.1-6 */\n  background: linear-gradient(to left, #4ECDC4, #556270);\n  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */\n}\n", ""]);
+	exports.push([module.id, "body {\n  background: #4ECDC4;\n  background: -webkit-linear-gradient(to left, #4ECDC4, #556270);\n  background: linear-gradient(to left, #4ECDC4, #556270);\n}\n.card {\n  background: white;\n  -webkit-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  -moz-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  margin-left: auto;\n  margin-right: auto;\n  border: solid 1px #ccc;\n  padding: 20px;\n  border-radius: 10px;\n  max-width: 400px;\n}\n", ""]);
 	
 	// exports
 
@@ -30281,14 +30281,20 @@
 	var restClient = __webpack_require__(/*! ../../restClient/ */ 254);
 	
 	var RollForm = __webpack_require__(/*! ../RollForm/RollForm */ 427);
-	var RollList = __webpack_require__(/*! ../RollList/RollList */ 691);
-	var HeaderBar = __webpack_require__(/*! ../HeaderBar/HeaderBar */ 700);
-	var Footer = __webpack_require__(/*! ../Footer/Footer */ 704);
+	var RollDisplay = __webpack_require__(/*! ../RollDisplay/RollDisplay */ 691);
+	var RollList = __webpack_require__(/*! ../RollList/RollList */ 700);
+	var HeaderBar = __webpack_require__(/*! ../HeaderBar/HeaderBar */ 704);
+	var Footer = __webpack_require__(/*! ../Footer/Footer */ 708);
 	var socket = io();
+	var url = __webpack_require__(/*! url */ 261);
 	
 	module.exports = React.createClass({
 	    displayName: 'exports',
 	
+	
+	    getClass: function getClass() {
+	        return componentName;
+	    },
 	
 	    getInitialState: function getInitialState() {
 	        return { mode: 'roller', rolls: [] };
@@ -30304,15 +30310,17 @@
 	    },
 	
 	    initialize: function initialize() {
+	        this.parseUrl();
 	        this.loadUser();
 	        this.loadRolls();
 	    },
 	
-	    addRoll: function addRoll(roll) {
-	        var rolls = this.state.rolls;
+	    parseUrl: function parseUrl() {
+	        var address = url.parse(window.location.toString(), true);
 	
-	        rolls.unshift(roll);
-	        this.setState({ rolls: rolls });
+	        if (address.query && address.query.roll) {
+	            this.showRoll(address.query.roll);
+	        }
 	    },
 	
 	    loadUser: function loadUser() {
@@ -30331,8 +30339,20 @@
 	        });
 	    },
 	
-	    getClass: function getClass() {
-	        return componentName;
+	    addRoll: function addRoll(roll) {
+	        var rolls = this.state.rolls;
+	
+	        rolls.unshift(roll);
+	        this.setState({ rolls: rolls });
+	    },
+	
+	    showRoll: function showRoll(id) {
+	        var _this4 = this;
+	
+	        restClient.getRoll(id).then(function (resp) {
+	            console.log(resp);
+	            _this4.setState({ roll: resp });
+	        });
 	    },
 	
 	    handleRenderMode: function handleRenderMode() {
@@ -30342,12 +30362,14 @@
 	    renderModeRoller: function renderModeRoller() {
 	        var state = this.state || {};
 	        var rolls = state.rolls || [];
+	        var rollDisplay = state.roll ? React.createElement(RollDisplay, { roll: state.roll }) : null;
 	
 	        return React.createElement(
 	            'div',
 	            null,
+	            rollDisplay,
 	            React.createElement(RollForm, { addRoll: this.addRoll }),
-	            React.createElement(RollList, { rolls: rolls })
+	            React.createElement(RollList, { rolls: rolls, showRoll: this.showRoll })
 	        );
 	    },
 	
@@ -30443,7 +30465,8 @@
 	
 	var get = __webpack_require__(/*! ./get */ 255);
 	var getSession = __webpack_require__(/*! ./getSession */ 421);
-	var getRolls = __webpack_require__(/*! ./getRolls */ 422);
+	var getRolls = __webpack_require__(/*! ./getRolls */ 712);
+	var getRoll = __webpack_require__(/*! ./getRoll */ 422);
 	var roll = __webpack_require__(/*! ./roll */ 423);
 	var updateUser = __webpack_require__(/*! ./updateUser */ 425);
 	var validateRoll = __webpack_require__(/*! ./validateRoll */ 426);
@@ -30452,6 +30475,7 @@
 	    get: get,
 	    getSession: getSession,
 	    getRolls: getRolls,
+	    getRoll: getRoll,
 	    roll: roll,
 	    updateUser: updateUser,
 	    validateRoll: validateRoll
@@ -74035,17 +74059,17 @@
 
 /***/ },
 /* 422 */
-/*!***************************************!*\
-  !*** ./src/js/restClient/getRolls.js ***!
-  \***************************************/
+/*!**************************************!*\
+  !*** ./src/js/restClient/getRoll.js ***!
+  \**************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var get = __webpack_require__(/*! ./get */ 255);
 	
-	module.exports = function () {
-	    return get('/api/roll');
+	module.exports = function (id) {
+	    return get('/api/roll/' + id);
 	};
 
 /***/ },
@@ -74314,7 +74338,7 @@
 	
 	
 	// module
-	exports.push([module.id, ".RollForm {\n  background: white;\n  -webkit-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  -moz-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  margin-left: auto;\n  margin-right: auto;\n  border: solid 1px #ccc;\n  max-width: 400px;\n  padding: 20px;\n  border-radius: 10px;\n}\n.RollForm .form-group {\n  max-width: 400px;\n}\n.RollForm .roll-button {\n  background: #BE5869;\n  border-radius: 50px;\n  height: 100px;\n  width: 100px;\n  margin: 0 auto;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 100px;\n  cursor: pointer;\n}\n.RollForm .roll-button:hover {\n  box-shadow: blue 0px 0px 0px 3px;\n}\n", ""]);
+	exports.push([module.id, "body {\n  background: #4ECDC4;\n  background: -webkit-linear-gradient(to left, #4ECDC4, #556270);\n  background: linear-gradient(to left, #4ECDC4, #556270);\n}\n.card {\n  background: white;\n  -webkit-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  -moz-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  margin-left: auto;\n  margin-right: auto;\n  border: solid 1px #ccc;\n  padding: 20px;\n  border-radius: 10px;\n  max-width: 400px;\n}\n.RollForm {\n  background: white;\n  -webkit-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  -moz-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  margin-left: auto;\n  margin-right: auto;\n  border: solid 1px #ccc;\n  padding: 20px;\n  border-radius: 10px;\n  max-width: 400px;\n}\n.RollForm .form-group {\n  max-width: 400px;\n}\n.RollForm .roll-button {\n  background: #BE5869;\n  border-radius: 50px;\n  height: 100px;\n  width: 100px;\n  margin: 0 auto;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 100px;\n  cursor: pointer;\n}\n.RollForm .roll-button:hover {\n  box-shadow: blue 0px 0px 0px 3px;\n}\n", ""]);
 	
 	// exports
 
@@ -93946,11 +93970,12 @@
 	    },
 	
 	    render: function render() {
+	        var removeIcon = this.props.removeTag ? React.createElement('span', { className: 'glyphicon glyphicon-remove-sign', onClick: this.handleRemoveClick }) : '';
 	        return React.createElement(
 	            'div',
 	            { className: this.getClass() },
 	            this.props.tag,
-	            React.createElement('span', { className: 'glyphicon glyphicon-remove-sign', onClick: this.handleRemoveClick })
+	            removeIcon
 	        );
 	    }
 	});
@@ -94097,21 +94122,21 @@
 
 /***/ },
 /* 691 */
-/*!*************************************************!*\
-  !*** ./src/js/components/RollList/RollList.jsx ***!
-  \*************************************************/
+/*!*******************************************************!*\
+  !*** ./src/js/components/RollDisplay/RollDisplay.jsx ***!
+  \*******************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var componentName = 'RollList';
+	var componentName = 'RollDisplay';
 	__webpack_require__(/*! . */ 692)("./" + componentName + '.less');
 	
 	var React = __webpack_require__(/*! react */ 79);
-	var restClient = __webpack_require__(/*! ../../restClient/ */ 254);
 	var userUtils = __webpack_require__(/*! ../../util/userUtils */ 695);
+	var rollUtils = __webpack_require__(/*! ../../util/rollUtils */ 714);
 	
-	var RollListItem = __webpack_require__(/*! ../RollListItem/RollListItem */ 696);
+	var Tag = __webpack_require__(/*! ../Tag/Tag */ 684);
 	
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -94122,29 +94147,40 @@
 	    },
 	
 	    render: function render() {
-	        var rolls = this.props.rolls || [];
-	        var renderRolls = rolls.map(function (roll, i) {
+	        var rslt = rollUtils.getBBCode(this.props.roll);
+	        var tags = this.props.roll.tags;
+	        var tagRendering = tags.map(function (tag, i) {
 	            if (i <= 20) {
-	                return React.createElement(RollListItem, { data: roll, key: roll._id });
+	                return React.createElement(Tag, { tag: tag, key: i });
 	            }
 	        });
 	        return React.createElement(
 	            'div',
 	            { className: this.getClass() },
-	            renderRolls
+	            React.createElement(
+	                'div',
+	                null,
+	                'BBCode: ',
+	                rslt
+	            ),
+	            React.createElement(
+	                'div',
+	                null,
+	                tagRendering
+	            )
 	        );
 	    }
 	});
 
 /***/ },
 /* 692 */
-/*!***************************************************!*\
-  !*** ./src/js/components/RollList ^\.\/.*\.less$ ***!
-  \***************************************************/
+/*!******************************************************!*\
+  !*** ./src/js/components/RollDisplay ^\.\/.*\.less$ ***!
+  \******************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./RollList.less": 693
+		"./RollDisplay.less": 693
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -94162,15 +94198,15 @@
 
 /***/ },
 /* 693 */
-/*!**************************************************!*\
-  !*** ./src/js/components/RollList/RollList.less ***!
-  \**************************************************/
+/*!********************************************************!*\
+  !*** ./src/js/components/RollDisplay/RollDisplay.less ***!
+  \********************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/less-loader!./RollList.less */ 694);
+	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/less-loader!./RollDisplay.less */ 694);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../../../~/style-loader/addStyles.js */ 67)(content, {});
@@ -94179,8 +94215,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./RollList.less", function() {
-				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./RollList.less");
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./RollDisplay.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./RollDisplay.less");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -94191,9 +94227,9 @@
 
 /***/ },
 /* 694 */
-/*!*********************************************************************************!*\
-  !*** ./~/css-loader!./~/less-loader!./src/js/components/RollList/RollList.less ***!
-  \*********************************************************************************/
+/*!***************************************************************************************!*\
+  !*** ./~/css-loader!./~/less-loader!./src/js/components/RollDisplay/RollDisplay.less ***!
+  \***************************************************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(/*! ./../../../../~/css-loader/lib/css-base.js */ 66)();
@@ -94201,7 +94237,7 @@
 	
 	
 	// module
-	exports.push([module.id, "", ""]);
+	exports.push([module.id, "body {\n  background: #4ECDC4;\n  background: -webkit-linear-gradient(to left, #4ECDC4, #556270);\n  background: linear-gradient(to left, #4ECDC4, #556270);\n}\n.card {\n  background: white;\n  -webkit-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  -moz-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  margin-left: auto;\n  margin-right: auto;\n  border: solid 1px #ccc;\n  padding: 20px;\n  border-radius: 10px;\n  max-width: 400px;\n}\n.RollDisplay {\n  background: white;\n  -webkit-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  -moz-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  margin-left: auto;\n  margin-right: auto;\n  border: solid 1px #ccc;\n  padding: 20px;\n  border-radius: 10px;\n  max-width: 400px;\n}\n", ""]);
 	
 	// exports
 
@@ -94257,6 +94293,9 @@
 	        return userUtils.getName(roll._user);
 	    },
 	
+	    handleShowRollClick: function handleShowRollClick() {
+	        this.props.showRoll(this.props.data._id);
+	    },
 	    render: function render() {
 	        var roll = this.props && this.props.data;
 	        var rollResult = roll && roll.result && JSON.parse(roll.result);
@@ -94275,7 +94314,7 @@
 	            ),
 	            React.createElement(
 	                'div',
-	                { className: 'result' },
+	                { className: 'result', onClick: this.handleShowRollClick },
 	                rollResult.result
 	            )
 	        );
@@ -94347,13 +94386,126 @@
 	
 	
 	// module
-	exports.push([module.id, ".RollListItem {\n  background: white;\n  -webkit-box-shadow: 0 0 10px -7px rgba(0, 0, 0, 0.75);\n  -moz-box-shadow: 0 0 10px -7px rgba(0, 0, 0, 0.75);\n  box-shadow: 0 0 10px -7px rgba(0, 0, 0, 0.75);\n  margin-left: auto;\n  margin-right: auto;\n  border: solid 1px #ccc;\n  max-width: 600px;\n  padding: 5px 20px;\n  border-radius: 2px;\n  margin-top: 4px;\n}\n.RollListItem > div {\n  display: inline-block;\n  text-align: center;\n  border-right: solid 1px #ccc;\n}\n.RollListItem > div:last-child {\n  border-right: none;\n}\n.RollListItem > div.user {\n  width: 200px;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.RollListItem > div.dice-string {\n  width: 200px;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  padding: 0 10px;\n}\n.RollListItem > div.result {\n  float: right;\n}\n", ""]);
+	exports.push([module.id, "body {\n  background: #4ECDC4;\n  background: -webkit-linear-gradient(to left, #4ECDC4, #556270);\n  background: linear-gradient(to left, #4ECDC4, #556270);\n}\n.card {\n  background: white;\n  -webkit-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  -moz-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  margin-left: auto;\n  margin-right: auto;\n  border: solid 1px #ccc;\n  padding: 20px;\n  border-radius: 10px;\n  max-width: 400px;\n}\n.RollListItem {\n  background: white;\n  -webkit-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  -moz-box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  box-shadow: 0 0 50px -7px rgba(0, 0, 0, 0.75);\n  margin-left: auto;\n  margin-right: auto;\n  border: solid 1px #ccc;\n  padding: 20px;\n  border-radius: 10px;\n  max-width: 400px;\n  max-width: 600px;\n  padding: 5px 20px;\n  border-radius: 2px;\n  margin-top: 4px;\n}\n.RollListItem > div {\n  display: inline-block;\n  text-align: center;\n  border-right: solid 1px #ccc;\n}\n.RollListItem > div:last-child {\n  border-right: none;\n}\n.RollListItem > div.user {\n  width: 200px;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n.RollListItem > div.dice-string {\n  width: 200px;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  padding: 0 10px;\n}\n.RollListItem > div.result {\n  float: right;\n}\n", ""]);
 	
 	// exports
 
 
 /***/ },
 /* 700 */
+/*!*************************************************!*\
+  !*** ./src/js/components/RollList/RollList.jsx ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var componentName = 'RollList';
+	__webpack_require__(/*! . */ 701)("./" + componentName + '.less');
+	
+	var React = __webpack_require__(/*! react */ 79);
+	var restClient = __webpack_require__(/*! ../../restClient/ */ 254);
+	var userUtils = __webpack_require__(/*! ../../util/userUtils */ 695);
+	
+	var RollListItem = __webpack_require__(/*! ../RollListItem/RollListItem */ 696);
+	
+	module.exports = React.createClass({
+	    displayName: 'exports',
+	
+	
+	    getClass: function getClass() {
+	        return componentName;
+	    },
+	
+	    render: function render() {
+	        var _this = this;
+	
+	        var rolls = this.props.rolls || [];
+	        var renderRolls = rolls.map(function (roll, i) {
+	            if (i <= 20) {
+	                return React.createElement(RollListItem, { data: roll, key: roll._id, showRoll: _this.props.showRoll });
+	            }
+	        });
+	        return React.createElement(
+	            'div',
+	            { className: this.getClass() },
+	            renderRolls
+	        );
+	    }
+	});
+
+/***/ },
+/* 701 */
+/*!***************************************************!*\
+  !*** ./src/js/components/RollList ^\.\/.*\.less$ ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./RollList.less": 702
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 701;
+
+
+/***/ },
+/* 702 */
+/*!**************************************************!*\
+  !*** ./src/js/components/RollList/RollList.less ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/less-loader!./RollList.less */ 703);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(/*! ./../../../../~/style-loader/addStyles.js */ 67)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./RollList.less", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js!./../../../../node_modules/less-loader/index.js!./RollList.less");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 703 */
+/*!*********************************************************************************!*\
+  !*** ./~/css-loader!./~/less-loader!./src/js/components/RollList/RollList.less ***!
+  \*********************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(/*! ./../../../../~/css-loader/lib/css-base.js */ 66)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 704 */
 /*!***************************************************!*\
   !*** ./src/js/components/HeaderBar/HeaderBar.jsx ***!
   \***************************************************/
@@ -94365,7 +94517,7 @@
 	var React = __webpack_require__(/*! react */ 79);
 	var userUtils = __webpack_require__(/*! ../../util/userUtils */ 695);
 	
-	__webpack_require__(/*! . */ 701)("./" + componentName + '.less');
+	__webpack_require__(/*! . */ 705)("./" + componentName + '.less');
 	
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -94410,14 +94562,14 @@
 	});
 
 /***/ },
-/* 701 */
+/* 705 */
 /*!****************************************************!*\
   !*** ./src/js/components/HeaderBar ^\.\/.*\.less$ ***!
   \****************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./HeaderBar.less": 702
+		"./HeaderBar.less": 706
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -94430,11 +94582,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 701;
+	webpackContext.id = 705;
 
 
 /***/ },
-/* 702 */
+/* 706 */
 /*!****************************************************!*\
   !*** ./src/js/components/HeaderBar/HeaderBar.less ***!
   \****************************************************/
@@ -94443,7 +94595,7 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/less-loader!./HeaderBar.less */ 703);
+	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/less-loader!./HeaderBar.less */ 707);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../../../~/style-loader/addStyles.js */ 67)(content, {});
@@ -94463,7 +94615,7 @@
 	}
 
 /***/ },
-/* 703 */
+/* 707 */
 /*!***********************************************************************************!*\
   !*** ./~/css-loader!./~/less-loader!./src/js/components/HeaderBar/HeaderBar.less ***!
   \***********************************************************************************/
@@ -94480,7 +94632,7 @@
 
 
 /***/ },
-/* 704 */
+/* 708 */
 /*!*********************************************!*\
   !*** ./src/js/components/Footer/Footer.jsx ***!
   \*********************************************/
@@ -94491,7 +94643,7 @@
 	var componentName = 'Footer';
 	var React = __webpack_require__(/*! react */ 79);
 	
-	__webpack_require__(/*! . */ 705)("./" + componentName + '.less');
+	__webpack_require__(/*! . */ 709)("./" + componentName + '.less');
 	
 	module.exports = React.createClass({
 	    displayName: 'exports',
@@ -94516,14 +94668,14 @@
 	});
 
 /***/ },
-/* 705 */
+/* 709 */
 /*!*************************************************!*\
   !*** ./src/js/components/Footer ^\.\/.*\.less$ ***!
   \*************************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./Footer.less": 706
+		"./Footer.less": 710
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -94536,11 +94688,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 705;
+	webpackContext.id = 709;
 
 
 /***/ },
-/* 706 */
+/* 710 */
 /*!**********************************************!*\
   !*** ./src/js/components/Footer/Footer.less ***!
   \**********************************************/
@@ -94549,7 +94701,7 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/less-loader!./Footer.less */ 707);
+	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/less-loader!./Footer.less */ 711);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../../../~/style-loader/addStyles.js */ 67)(content, {});
@@ -94569,7 +94721,7 @@
 	}
 
 /***/ },
-/* 707 */
+/* 711 */
 /*!*****************************************************************************!*\
   !*** ./~/css-loader!./~/less-loader!./src/js/components/Footer/Footer.less ***!
   \*****************************************************************************/
@@ -94584,6 +94736,40 @@
 	
 	// exports
 
+
+/***/ },
+/* 712 */
+/*!***************************************!*\
+  !*** ./src/js/restClient/getRolls.js ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var get = __webpack_require__(/*! ./get */ 255);
+	
+	module.exports = function () {
+	    return get('/api/roll/');
+	};
+
+/***/ },
+/* 713 */,
+/* 714 */
+/*!**********************************!*\
+  !*** ./src/js/util/rollUtils.js ***!
+  \**********************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	function getBBCode(roll) {
+	    var result = JSON.parse(roll.result);
+	    return '<a href="https://rollbox.herokuapp.com?roll=' + roll._id + '"></a>';
+	}
+	
+	module.exports = {
+	    getBBCode: getBBCode
+	};
 
 /***/ }
 /******/ ]);

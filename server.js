@@ -24,9 +24,9 @@ function setupIo() {
 function setupRoutes() {
     const api = require('./api/index');
     app.use(bodyParser.json());
-    app.use(express.static('static'));
+    app.use(express.static('./static'));
     app.use(expressSession({
-        secret: 'my secret key',
+        secret: '12185615-c02f-4513-993f-0e26681fdb93',
         saveUninitialized: true
     }));
     resave: true,

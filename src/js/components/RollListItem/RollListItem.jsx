@@ -17,6 +17,9 @@ module.exports = React.createClass({
         return userUtils.getName(roll._user);
     },
 
+    handleShowRollClick: function() {
+        this.props.showRoll(this.props.data._id)
+    },
     render: function() {
         let roll = this.props && this.props.data;
         let rollResult = roll && roll.result && JSON.parse(roll.result);
@@ -24,7 +27,7 @@ module.exports = React.createClass({
             <div className={this.getClass()}>
                 <div className="user">{this.getUsername()}</div>
                 <div className="dice-string">{roll.diceString}</div>
-                <div className="result">{rollResult.result}</div>
+                <div className="result" onClick={this.handleShowRollClick}>{rollResult.result}</div>
             </div>
         )
     }
